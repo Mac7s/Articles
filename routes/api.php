@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\V1\ArticleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::prefix('v1')->group(function(){
-    Route::get('/',[ArticleController::class,'index']);
-});
+require __DIR__.'/auth.php';
+
+Route::get('test',function(){
+    echo 'test';
+})->middleware('throttle:3,1');

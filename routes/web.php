@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\RateLimiter;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/password-reset/{token}', function ($token) {
+    return view('reset-password', ['token' => $token]);
+})->middleware('guest');
+
+Route::get('one',function(){
+    echo "test";
+})->middleware('throttle:3,1');
