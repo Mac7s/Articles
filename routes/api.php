@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,20 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 require __DIR__.'/auth.php';
 
-Route::get('test',function(){
-    echo 'test';
-})->middleware('throttle:3,1');
+Route::prefix('v1')->group(function(){
+    Route::get('articles',[ArticleController::class,'index']);
+    Route::get('articles/{article:slug}',[ArticleController::class,'show']);
+    Route::post('articles',[ArticleController::class,'store'])->middleware(['auth:sanctum','throttle:3,1']);
+    Route::put('articles/{article:slug}',[ArticleController::class,'update'])->middleware(['auth:sanctum','throttle:3,1']);
+    Route::delete('articles/{article:slug}',[ArticleController::class,'destory'])->middleware(['auth:sanctum','throttle:3,1']);
+});
+
+
+
+
+
+
+
+
+
+

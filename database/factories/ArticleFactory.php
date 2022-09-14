@@ -19,6 +19,7 @@ class ArticleFactory extends Factory
     {
         return [
             'title'=>$this->faker->title(),
+            'slug'=>$this->faker->slug(),
             'shortDescription'=>$this->faker->sentence(),
             'full_desciption'=>$this->faker->paragraph(),
             'user_id'=>User::first() ?? User::factory(),

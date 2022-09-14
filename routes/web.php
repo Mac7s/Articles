@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\ArticleController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -22,3 +23,6 @@ Route::get('/password-reset/{token}', function ($token) {
 Route::get('one',function(){
     echo "test";
 })->middleware('throttle:3,1');
+
+
+

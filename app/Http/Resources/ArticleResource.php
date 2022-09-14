@@ -16,6 +16,7 @@ class ArticleResource extends JsonResource
     {
         return [
             'title'=>$this->title,
+            'slug'=>$this->slug,
             'shortDescription'=>$this->shortDescription,
             'longDescripiton'=>$this->full_desciption,
             'author'=>$this->user->only('name','email'),
