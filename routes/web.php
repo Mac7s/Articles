@@ -24,5 +24,14 @@ Route::get('one',function(){
     echo "test";
 })->middleware('throttle:3,1');
 
-
+Route::get('test',function(){
+    $client = new \IPPanel\Client(config('services.sms.api_key'));
+    $messageId = $client->send(
+        config('services.sms.originator_number'),          // originator
+        ["+989336024962"],    // recipients
+        "این یک پیام لاراول است",// message
+        'this is description'
+    );
+    dd($messageId);
+});
 

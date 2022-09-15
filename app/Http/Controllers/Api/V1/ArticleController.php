@@ -36,7 +36,7 @@ class ArticleController extends Controller
     }
     public function destory(Article $article,DeleteArticleRequest $request){
         $article_title = $article->title;
-        $article->delete();
+        // $article->delete();
         $request->user()->notify(new DeleteArticleNotification($article_title));
         return response()->json([
             'message'=>'article deleted successfully'

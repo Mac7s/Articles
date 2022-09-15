@@ -4,11 +4,12 @@ namespace App\Notifications;
 
 use App\Models\Article;
 use Illuminate\Bus\Queueable;
+use App\Notifications\FarazSmsChannel;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class DeleteArticleNotification extends Notification implements ShouldQueue
+class DeleteArticleNotification extends Notification
 {
     use Queueable;
 
@@ -31,7 +32,8 @@ class DeleteArticleNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        // return ['mail'];
+        return [FarazSmsChannel::class];
     }
 
     /**
@@ -44,6 +46,17 @@ class DeleteArticleNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)->markdown('emails.delete-article',['title'=>$this->article_title]);
     }
+
+    public function toFaraz($notifiable){
+        $client = new \IPPanel\Client(config('services.sms.api_key'));
+        $messageId = $client->send(
+            config('services.sms.originator_number'),          // originator
+            ["+989336024962"],    // recipients
+            "این یک پیام لاراول است",// message
+            'this is description'
+        );
+    }
+
 
     /**
      * Get the array representation of the notification.
