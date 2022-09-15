@@ -5,11 +5,12 @@ namespace App\Notifications;
 use App\Models\Article;
 use Illuminate\Bus\Queueable;
 use App\Notifications\FarazSmsChannel;
+use App\Services\SmsService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class DeleteArticleNotification extends Notification
+class DeleteArticleNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -48,13 +49,8 @@ class DeleteArticleNotification extends Notification
     }
 
     public function toFaraz($notifiable){
-        $client = new \IPPanel\Client(config('services.sms.api_key'));
-        $messageId = $client->send(
-            config('services.sms.originator_number'),          // originator
-            ["+989336024962"],    // recipients
-            "این یک پیام لاراول است",// message
-            'this is description'
-        );
+        $message = "your article with {$this->article_title} is deleted in site";
+        (new SmsService)->sendSms($notifiable->phone,$message);
     }
 
 

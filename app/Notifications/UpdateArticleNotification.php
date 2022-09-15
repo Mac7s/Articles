@@ -3,10 +3,12 @@
 namespace App\Notifications;
 
 use App\Models\Article;
+use App\Services\SmsService;
 use Illuminate\Bus\Queueable;
+use App\Notifications\FarazSmsChannel;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class UpdateArticleNotification extends Notification implements ShouldQueue
 {
@@ -20,7 +22,7 @@ class UpdateArticleNotification extends Notification implements ShouldQueue
      */
     public function __construct(public Article $article)
     {
-        
+
     }
 
     /**
@@ -31,7 +33,7 @@ class UpdateArticleNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail',FarazSmsChannel::class];
     }
 
     /**
@@ -46,6 +48,10 @@ class UpdateArticleNotification extends Notification implements ShouldQueue
 
     }
 
+    public function toFaraz($notifiable){
+        $message = "your article with {$this->article->title} is updated in site";
+        (new SmsService)->sendSms($notifiable->phone,$message);
+    }
 
     /**
      * Get the array representation of the notification.
