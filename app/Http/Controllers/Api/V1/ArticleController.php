@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\DeleteArticleRequest;
-use App\Http\Requests\StoreArticleRequest;
-use App\Http\Requests\UpdateArticleRequest;
-use App\Http\Resources\ArticleResource;
 use App\Models\Article;
-use App\Services\ArticleService;
 use Illuminate\Http\Request;
+use App\Services\ArticleService;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ArticleResource;
+use App\Http\Requests\StoreArticleRequest;
+use App\Http\Requests\DeleteArticleRequest;
+use App\Http\Requests\UpdateArticleRequest;
+use App\Notifications\DeleteArticleNotification;
+use App\Notifications\UpdateArticleNotification;
 
 class ArticleController extends Controller
 {
@@ -27,12 +29,15 @@ class ArticleController extends Controller
     }
     public function update(Article $article,UpdateArticleRequest $request){
         $article->update($request->all());
+        $request->user()->notify(new UpdateArticleNotification($article));
         return response()->json([
             'message'=>'article updated successfully'
         ]);
     }
     public function destory(Article $article,DeleteArticleRequest $request){
+        $article_title = $article->title;
         $article->delete();
+        $request->user()->notify(new DeleteArticleNotification($article_title));
         return response()->json([
             'message'=>'article deleted successfully'
         ]);
