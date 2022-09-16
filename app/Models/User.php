@@ -48,4 +48,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function articles(){
         return $this->hasMany(Article::class);
     }
+
+    public function smsverify()
+    {
+        return $this->hasOne(Smsverify::class);
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\ArticleController;
+use App\Models\Smsverify;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\RateLimiter;
 
@@ -25,13 +27,12 @@ Route::get('one',function(){
 })->middleware('throttle:3,1');
 
 Route::get('test',function(){
-    $client = new \IPPanel\Client(config('services.sms.api_key'));
-    $messageId = $client->send(
-        config('services.sms.originator_number'),          // originator
-        ["+989336024962"],    // recipients
-        "این یک پیام لاراول است",// message
-        'this is description'
-    );
-    dd($messageId);
+    $test = Smsverify::first();
+    dd(now()->timestamp-$test->created_at->timestamp);
+
 });
+
+
+
+
 

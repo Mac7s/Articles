@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\CategoryArticleController;
+use App\Http\Controllers\SmsverifyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::prefix('v1')->group(function(){
     Route::put('articles/{article:slug}',[ArticleController::class,'update'])->middleware(['auth:sanctum','throttle:3,1']);
     Route::delete('articles/{article:slug}',[ArticleController::class,'destory'])->middleware(['auth:sanctum','throttle:3,1']);
     Route::get('categories/{category:name}/articles',[CategoryArticleController::class,'index'])->name('categories.articles.index');
+    Route::post('send-verification',[SmsverifyController::class,'askForVerify']);
+    Route::post('verify-number',[SmsverifyController::class,'VerifyNumber']);
 });
 
 

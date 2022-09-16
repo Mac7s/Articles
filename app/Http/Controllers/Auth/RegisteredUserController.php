@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\SmsVerification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,19 +23,26 @@ class RegisteredUserController extends Controller
      */
     public function store(RegisterRequest $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
 
-        event(new Registered($user));
+        $number_is_verified = (new SmsVerification($request->phone))->is_verified();
+        if($number_is_verified){
+            $user = User::create([
+                'name' => $request->name,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        Auth::login($user);
-        $token = $user->createToken('api');
+            event(new Registered($user));
+            Auth::login($user);
+            $token = $user->createToken('api');
+            return response()->json([
+                'token'=>$token->plainTextToken
+            ]);
+        }
         return response()->json([
-            'token'=>$token->plainTextToken
+            'message'=>'please verify your phone first'
         ]);
+
     }
 }
