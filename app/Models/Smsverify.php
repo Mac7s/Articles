@@ -12,4 +12,9 @@ class Smsverify extends Model
     protected $fillable = [
         'phone'
     ];
+    public function existNumberInDatabase($phone){
+        return $this::where('phone',$phone)->first();
+    }
+    
+
 }
