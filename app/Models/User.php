@@ -53,4 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Smsverify::class);
     }
+    public function like(){
+        return $this->hasOne(Like::class);
+    }
 }

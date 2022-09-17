@@ -29,5 +29,13 @@ class Article extends Model
     public function scopeFilter($query,array $params){
         (new ArticleFilter($query))->apply($params);
     }
+    public function likes(){
+        return $this->hasMany(Like::class);
+    }
+
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
 
 }
