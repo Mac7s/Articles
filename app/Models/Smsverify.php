@@ -13,8 +13,7 @@ class Smsverify extends Model
         'phone'
     ];
     public function existNumberInDatabase($phone){
-        return $this::where('phone',$phone)->first();
+        return $this->where('phone',$phone)->first();
     }
-    
 
 }

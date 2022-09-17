@@ -19,8 +19,10 @@ class SmsVerificationSend{
         if(!$this->exist_model){
             $this->newVerification();
             VerifyNumber::dispatch($this->phone,$this->rand_number);
+            return "please enter your verification code in ". ceil(config('services.sms.sendAgainInSeconde')/60) ." min";
         }
 
+        dd('this is test');
         $this->updateVerification();
         VerifyNumber::dispatch($this->phone,$this->rand_number);
         return "please enter your verification code in ". ceil(config('services.sms.sendAgainInSeconde')/60) ." min";
@@ -30,6 +32,7 @@ class SmsVerificationSend{
     private function updateVerification(){
         $this->exist_model->verification_code = $this->rand_number;
         $this->exist_model->update();
+        return 0;
     }
 
     private function newVerification(){
@@ -37,6 +40,7 @@ class SmsVerificationSend{
             $new_sms->phone = $this->phone;
             $new_sms->verification_code =$this->rand_number;
             $new_sms->save();
+            return 0 ;
     }
 
 
